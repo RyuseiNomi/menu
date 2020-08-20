@@ -13,4 +13,4 @@ test:
 	$(GOTEST) -v ./...
 
 exec-dev:
-	$(GOBUILD) -o $(BINARY_NAME); ./$(BINARY_NAME
+	$(GOBUILD) -o $(BINARY_NAME); ./$(BINARY_NAME)
