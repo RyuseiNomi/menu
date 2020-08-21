@@ -13,27 +13,23 @@ const (
 	statusIndex      = 2
 )
 
-// container
-// リストに表示するコンテナモデル
+// container リストに表示するコンテナモデル
 type container struct {
 	id     string
 	name   string
 	status string
 }
 
-// containers
-// 複数のContainerモデルを持つ構造体
+// containers 複数のContainerモデルを持つ構造体
 type containers []container
 
-// containerTuiWorker
-// コンテナ一覧表示プロセスに関わる情報を保持する構造体
+// containerTuiWorker コンテナ一覧表示プロセスに関わる情報を保持する構造体
 type containerTuiWorker struct {
 	page *tview.Pages
 	app  *tview.Application
 }
 
-// NewContainerTuiWorker
-// コンテナ一覧表示プロセスに関わる情報を保持する構造体を返却する
+// NewContainerTuiWorker コンテナ一覧表示プロセスに関わる情報を保持する構造体を返却する
 func NewContainerTuiWorker(p *tview.Pages, a *tview.Application) *containerTuiWorker {
 	return &containerTuiWorker{
 		page: p,
@@ -41,8 +37,7 @@ func NewContainerTuiWorker(p *tview.Pages, a *tview.Application) *containerTuiWo
 	}
 }
 
-// Handle
-// コンテナ一覧画面に関する操作の流れを集約しているメソッド
+// Handle コンテナ一覧画面に関する操作の流れを集約しているメソッド
 func (ctw *containerTuiWorker) Handle() {
 	cs, err := getContainers()
 	if err != nil {
@@ -63,8 +58,9 @@ func (ctw *containerTuiWorker) Handle() {
 	ctw.page.AddPage("c-list", list, true, true)
 }
 
-// getModal
-// モーダルをアプリのページに表示する
+// ------------------ TUIに関するメソッド ------------------------
+
+// getModal モーダルをアプリのページに表示する
 func getModal(c container, p *tview.Pages) *tview.Modal {
 	// モーダル
 	modal := tview.NewModal().
@@ -113,8 +109,9 @@ func getModal(c container, p *tview.Pages) *tview.Modal {
 	return modal
 }
 
-// getContainers
-// 外部コマンドを実行し、Dockerコンテナを取得する
+// ------------------ 外部コマンドによるコンテナ操作メソッド ------------------------
+
+// getContainers 外部コマンドを実行し、Dockerコンテナを取得する
 func getContainers() (containers, error) {
 
 	cs := containers{}
@@ -148,8 +145,7 @@ func getContainers() (containers, error) {
 	return cs, nil
 }
 
-// startContainer
-// コンテナを起動する外部コマンドを実行する
+// startContainer コンテナを起動する外部コマンドを実行する
 func startContainer(c container) error {
 	_, err := exec.Command("docker", "start", c.name).Output()
 	if err != nil {
@@ -158,8 +154,7 @@ func startContainer(c container) error {
 	return nil
 }
 
-// stopContainer
-// コンテナを停止する外部コマンドを実行する
+// stopContainer コンテナを停止する外部コマンドを実行する
 func stopContainer(c container) error {
 	_, err := exec.Command("docker", "stop", c.name).Output()
 	if err != nil {
