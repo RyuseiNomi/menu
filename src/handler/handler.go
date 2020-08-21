@@ -1,13 +1,13 @@
 package src
 
 import (
-	"log"
 	"os/exec"
 
 	t "github.com/RyuseiNomi/menu/src/tui"
 	"github.com/rivo/tview"
 )
 
+// Handle 画面に表示するリストの描画と各イベントの呼び出しを行う
 func Handle() {
 	app := tview.NewApplication()
 	page := tview.NewPages()
@@ -29,7 +29,6 @@ func Handle() {
 		AddItem("レポート", "", 'r', nil).
 		AddItem("とじる", "", 'q', func() {
 			app.Stop()
-			log.Println("aaa")
 		})
 	page.AddPage("list", list, true, true)
 	if err := app.SetRoot(page, true).Run(); err != nil {
