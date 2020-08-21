@@ -2,6 +2,7 @@ package src
 
 import (
 	"log"
+	"os/exec"
 
 	t "github.com/RyuseiNomi/menu/src/tui"
 	"github.com/rivo/tview"
@@ -17,8 +18,15 @@ func Handle() {
 			ctw.Handle()
 		}).
 		AddItem("アプリ", "", 'a', nil).
+		AddItem("ユーザ", "", 's', func() {
+			// TODO シェル等を用いてユーザ名を取得する
+			app.Stop()
+			_, err := exec.Command("open", "/System/Library/PreferencePanes/Accounts.prefPane/").Output()
+			if err != nil {
+				panic(err)
+			}
+		}).
 		AddItem("レポート", "", 'r', nil).
-		AddItem("せってい", "", 's', nil).
 		AddItem("とじる", "", 'q', func() {
 			app.Stop()
 			log.Println("aaa")
