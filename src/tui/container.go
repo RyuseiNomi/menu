@@ -38,7 +38,7 @@ func NewContainerTuiWorker(p *tview.Pages, a *tview.Application) *containerTuiWo
 }
 
 // Handle コンテナ一覧画面に関する操作の流れを集約しているメソッド
-func (ctw *containerTuiWorker) Handle() {
+func (ctw *containerTuiWorker) HandleContainer() {
 	cs, err := getContainers()
 	if err != nil {
 		panic(err)
