@@ -34,7 +34,9 @@ func showModal(rtw *reportTuiWorker) {
 			if buttonLabel == "はい" {
 				// git stash saveの実行
 				rtw.app.Stop()
-				stash()
+				if err := stash(); err != nil {
+					panic(err)
+				}
 			} else if buttonLabel == "いいえ" {
 				rtw.page.RemovePage("modal")
 			}
