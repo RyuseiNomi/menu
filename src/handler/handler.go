@@ -29,7 +29,10 @@ func Handle() {
 				panic(err)
 			}
 		}).
-		AddItem("レポート", "", 'r', nil).
+		AddItem("レポート", "", 'r', func() {
+			rtw := t.NewReportTuiWorker(page, app)
+			rtw.HandleReport()
+		}).
 		AddItem("とじる", "", 'q', func() {
 			app.Stop()
 		})
