@@ -20,7 +20,13 @@ func Handle() {
 			ctw := t.NewContainerTuiWorker(page, app)
 			ctw.HandleContainer()
 		}).
-		AddItem("アプリ", "", 'a', nil).
+		AddItem("アプリ", "", 'a', func() {
+			app.Stop()
+			_, err := exec.Command("open", "/Applications").Output()
+			if err != nil {
+				panic(err)
+			}
+		}).
 		AddItem("ユーザ", "", 's', func() {
 			// TODO シェル等を用いてユーザ名を取得する
 			app.Stop()
