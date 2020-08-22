@@ -1,8 +1,12 @@
 package tui
 
 import (
+	"bufio"
+	"fmt"
+	"os"
 	"os/exec"
 	"regexp"
+	"strings"
 
 	"github.com/rivo/tview"
 )
@@ -29,17 +33,37 @@ func showModal(rtw *reportTuiWorker) {
 		AddButtons([]string{"Ok", "Cancel"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			if buttonLabel == "Ok" {
+				// git stash saveの実行
 				rtw.app.Stop()
-				// shellの実行
-				err := exec.Command("sh", "../shell/report.sh").Run()
-				if err != nil {
-					panic(err)
-				}
+				stash()
 			} else if buttonLabel == "Cancel" {
 				rtw.page.RemovePage("modal")
 			}
 		})
 	rtw.page.AddPage("modal", modal, true, true)
+}
+
+func stash() error {
+	fmt.Println("以下の差分をStashします。")
+	fmt.Println("-----------------------\n ")
+	out, err := exec.Command("git", "status").Output()
+	if err != nil {
+		return err
+	}
+	r := regexp.MustCompile(`modified:  .*`)
+	files := r.FindAllStringSubmatch(string(out), -1)
+	for i := range files {
+		fmt.Printf("\x1b[31m%s\x1b[0m \n", files[i])
+	}
+	fmt.Println("\n-----------------------")
+	fmt.Println("Stashに対する説明文を入力してください。\n")
+	fmt.Println("-----------------------")
+	text := getStashExplain()
+	err = exec.Command("git", "stash", "save", text).Run()
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 func isUnderGitDirectory(rtw *reportTuiWorker) {
@@ -60,4 +84,12 @@ func isUnderGitDirectory(rtw *reportTuiWorker) {
 			})
 		rtw.page.AddPage("errModal", errModal, true, true)
 	}
+}
+
+func getStashExplain() string {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	text := strings.TrimSpace(scanner.Text())
+	explain := "\"" + text + "\""
+	return explain
 }
