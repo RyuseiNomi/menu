@@ -12,10 +12,10 @@ func Handle() {
 	app := tview.NewApplication()
 	page := tview.NewPages()
 	list := tview.NewList().
-		AddItem("ずかん", "", 'd', func() {
-			dtw := t.NewDictionaryTuiWorker(page, app)
-			dtw.HandleDictionary()
-		}).
+		//AddItem("ずかん", "", 'd', func() {
+		//	dtw := t.NewDictionaryTuiWorker(page, app)
+		//	dtw.HandleDictionary()
+		//}).
 		AddItem("コンテナ", "", 'c', func() {
 			ctw := t.NewContainerTuiWorker(page, app)
 			ctw.HandleContainer()
